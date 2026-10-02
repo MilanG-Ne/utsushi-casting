@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import type { EnquiryPayload } from "./schema";
 
@@ -18,6 +18,7 @@ export interface EnquiryQueue {
   /** True when records survive restarts and are shared between serverless instances. */
   readonly durable: boolean;
   put(record: OutboxRecord): Promise<void>;
+  get(id: string): Promise<OutboxRecord | null>;
   update(record: OutboxRecord): Promise<void>;
   remove(id: string): Promise<void>;
   /** Pending records due at or before `now`, oldest first. */
@@ -40,6 +41,10 @@ export function createMemoryQueue(): EnquiryQueue & { records: Map<string, Outbo
     records,
     async put(r) {
       records.set(r.payload.id, structuredClone(r));
+    },
+    async get(id) {
+      const r = records.get(id);
+      return r ? structuredClone(r) : null;
     },
     async update(r) {
       records.set(r.payload.id, structuredClone(r));
@@ -73,11 +78,13 @@ export function createMemoryQueue(): EnquiryQueue & { records: Map<string, Outbo
   };
 }
 
-// ------------------------------------------------------------------ JSON file (local dev)
+// ------------------------------------------------------------------ JSON file (self-hosted)
 
 /**
- * JSON file on local disk: durable for `next dev` / self-hosted `next start` on one
- * machine. Never used on Vercel, where the filesystem is ephemeral per instance.
+ * JSON file on local disk: durable for `next dev` / self-hosted `next start` running as a
+ * single process on one machine (not for clustered processes, which would each keep their
+ * own copy). Never used on Vercel, where the filesystem is ephemeral per instance.
+ * Writes go to a temp file and are renamed into place, so a crash cannot truncate it.
  */
 export function createFileQueue(path: string): EnquiryQueue {
   const memory = createMemoryQueue();
@@ -85,17 +92,24 @@ export function createFileQueue(path: string): EnquiryQueue {
   let chain = Promise.resolve();
   const load = async () => {
     if (loaded) return;
-    loaded = true;
+    let raw: string;
     try {
-      const data = JSON.parse(await readFile(path, "utf8")) as OutboxRecord[];
-      for (const r of data) memory.records.set(r.payload.id, r);
-    } catch {
-      /* first run: no file yet */
+      raw = await readFile(path, "utf8");
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+      loaded = true; // first run: no file yet
+      return;
     }
+    // A file that cannot be parsed must never be treated as an empty outbox: this throws.
+    const data = JSON.parse(raw) as OutboxRecord[];
+    for (const r of data) memory.records.set(r.payload.id, r);
+    loaded = true;
   };
   const persist = async () => {
     await mkdir(dirname(path), { recursive: true });
-    await writeFile(path, JSON.stringify([...memory.records.values()], null, 2));
+    const tmp = `${path}.${process.pid}.tmp`;
+    await writeFile(tmp, JSON.stringify([...memory.records.values()], null, 2));
+    await rename(tmp, path);
   };
   const serial = <T>(fn: () => Promise<T>): Promise<T> => {
     const run = chain.then(load).then(fn);
@@ -109,6 +123,7 @@ export function createFileQueue(path: string): EnquiryQueue {
     name: "file",
     durable: true,
     put: (r) => serial(async () => (await memory.put(r), persist())),
+    get: (id) => serial(() => memory.get(id)),
     update: (r) => serial(async () => (await memory.update(r), persist())),
     remove: (id) => serial(async () => (await memory.remove(id), persist())),
     due: (now, limit) => serial(() => memory.due(now, limit)),
@@ -160,9 +175,11 @@ export function createRedisQueue(redis: RedisLike): EnquiryQueue {
     durable: true,
     put: write,
     update: write,
+    get: read,
     async remove(id) {
+      // The lock is left to its owner (release) or its TTL, never removed from under a drain.
       await redis.zrem(K.due, id);
-      await redis.del(K.record(id), K.lock(id));
+      await redis.del(K.record(id));
     },
     async due(now, limit) {
       const ids = (await redis.zrange(K.due, 0, now, { byScore: true, offset: 0, count: limit })).map(String);

@@ -37,7 +37,7 @@ export const enquiryInputSchema = z.object({
   sourcePage: z
     .string()
     .max(200)
-    .regex(/^\/[\w\-/]*$/)
+    .regex(/^\/(?!\/)[\w\-/]*$/)
     .default("/contact"),
   /** Honeypot: humans never see this field. Anything here marks the submission as spam. */
   website: z.string().max(200).optional().default(""),

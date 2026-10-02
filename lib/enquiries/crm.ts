@@ -19,8 +19,9 @@ type Options = {
 
 /**
  * POSTs the payload as JSON. 2xx and 409 (already received) count as delivered.
- * Network errors, timeouts, 408, 429 and 5xx are retryable; other 4xx mean the CRM
- * rejected the payload itself, so retrying would not help (it is dead-lettered).
+ * Network errors, timeouts, 408, 429 and 5xx are retryable; other 4xx (and redirects, which
+ * point at a misconfigured endpoint) are permanent, so the enquiry is dead-lettered and
+ * handed to the team by email.
  */
 export function createHttpCrmClient({ endpoint, signingSecret, apiKey, timeoutMs = 4000, fetchImpl = fetch }: Options): CrmClient {
   return {
@@ -35,7 +36,12 @@ export function createHttpCrmClient({ endpoint, signingSecret, apiKey, timeoutMs
       if (signingSecret) headers[SIGNATURE_HEADER] = sign(body, signingSecret);
       if (apiKey) headers.authorization = `Bearer ${apiKey}`;
       try {
-        const res = await fetchImpl(endpoint, { method: "POST", headers, body, signal: AbortSignal.timeout(timeoutMs), cache: "no-store" });
+        // Never follow redirects: a 301/302 would turn the POST into a bodiless GET whose 200
+        // could be mistaken for a delivery.
+        const res = await fetchImpl(endpoint, { method: "POST", headers, body, signal: AbortSignal.timeout(timeoutMs), cache: "no-store", redirect: "manual" });
+        if (res.type === "opaqueredirect" || (res.status >= 300 && res.status < 400)) {
+          return { ok: false, retryable: false, status: res.status || null, error: "CRM endpoint redirected; check CRM_ENDPOINT" };
+        }
         if (res.ok || res.status === 409) {
           const data = (await res.json().catch(() => null)) as { crmId?: string } | null;
           return { ok: true, crmId: data?.crmId ?? null, status: res.status };

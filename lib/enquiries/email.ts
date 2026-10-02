@@ -28,13 +28,16 @@ export function createResendTransport({ apiKey, from, to, fetchImpl = fetch }: {
   };
 }
 
-/** Development transport: logs a one-line notice. Never counts as a durable channel. */
+/**
+ * Fallback when no email provider is configured: logs that an email would have been sent,
+ * identified by its idempotency key only (no names or addresses). Never counts as durable.
+ */
 export function createLogTransport(): EmailTransport {
   return {
     name: "log",
     durable: false,
     async send(message) {
-      console.info(`[enquiry:email:dev] would send "${message.subject}"`);
+      console.info(JSON.stringify({ scope: "enquiry", event: "email_not_configured", key: message.idempotencyKey }));
     },
   };
 }

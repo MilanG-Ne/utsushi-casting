@@ -213,3 +213,76 @@ describe("HTTP CRM client", () => {
     expect(verify(String(init.body), headers["x-utsushi-signature"]!, "s3cret")).toBe(true);
   });
 });
+
+describe("review regressions", () => {
+  it("a drain running during a submission cannot touch the in-flight enquiry", async () => {
+    let releaseCrm!: (r: CrmResult) => void;
+    const first = new Promise<CrmResult>((resolve) => (releaseCrm = resolve));
+    const { deps, memory, setNow, calls } = fixture([]);
+    deps.crm = {
+      async deliver(payload, attempt) {
+        calls.push({ id: payload.id, attempt });
+        return calls.length === 1 ? first : down;
+      },
+    };
+    const p = payload();
+    const submission = submitEnquiry(p, deps);
+    await new Promise((r) => setTimeout(r, 0));
+    setNow(T0 + RETRY_DELAYS_MS[0]! + 1); // even once it would be due, the claim protects it
+    expect(await drainQueue(deps)).toMatchObject({ processed: 0, deadLettered: 0 });
+    releaseCrm(down);
+    expect((await submission).status).toBe("queued");
+    expect(memory.records.get(p.id)?.status).toBe("pending");
+  });
+
+  it("an orphaned record (attempts never recorded) is retried, not dead-lettered", async () => {
+    const { deps, memory } = fixture([down]);
+    const p = payload();
+    await memory.put({ payload: p, status: "pending", attempts: 0, nextAttemptAt: T0, lastError: null, emailFallbackSent: false, createdAt: T0 });
+    expect(await drainQueue(deps)).toMatchObject({ rescheduled: 1, deadLettered: 0 });
+    expect(memory.records.get(p.id)).toMatchObject({ status: "pending", attempts: 1 });
+  });
+
+  it("keeps a dead letter pending until the manual-entry email actually goes out", async () => {
+    const { deps, memory } = fixture([{ ok: false, retryable: false, status: 422, error: "CRM responded 422" }], { emailFails: true });
+    const p = payload();
+    const result = await submitEnquiry(p, deps);
+    expect(result.status).toBe("queued"); // held in the durable outbox
+    expect(memory.records.get(p.id)?.status).toBe("pending");
+  });
+
+  it("skips a record that another drain already handled after the snapshot was taken", async () => {
+    const { deps, memory, calls } = fixture([]);
+    const p = payload();
+    const record = { payload: p, status: "pending" as const, attempts: 2, nextAttemptAt: T0, lastError: null, emailFallbackSent: false, createdAt: T0 };
+    await memory.put(record);
+    const stale = { ...memory, due: async () => [record], get: async () => null };
+    expect(await drainQueue({ ...deps, queue: stale })).toMatchObject({ processed: 0, skipped: 1 });
+    expect(calls).toHaveLength(0);
+  });
+
+  it("treats a redirecting CRM endpoint as a permanent failure instead of a delivery", async () => {
+    const fetchImpl = vi.fn(async () => new Response(null, { status: 302, headers: { location: "https://crm.example.test/login" } }));
+    const result = await createHttpCrmClient({ endpoint: "http://crm.example.test", fetchImpl: fetchImpl as unknown as typeof fetch }).deliver(payload(), 1);
+    expect(result).toMatchObject({ ok: false, retryable: false });
+  });
+
+  it("caps request bodies even without a Content-Length header", async () => {
+    const { readBodyLimited } = await import("@/lib/enquiries/body");
+    const stream = new ReadableStream({
+      start(controller) {
+        for (let i = 0; i < 10; i++) controller.enqueue(new TextEncoder().encode("x".repeat(1024)));
+        controller.close();
+      },
+    });
+    const req = new Request("http://localhost/api", { method: "POST", body: stream, duplex: "half" } as RequestInit);
+    expect(await readBodyLimited(req, 4096)).toBeNull();
+    expect(await readBodyLimited(new Request("http://localhost/api", { method: "POST", body: "ok" }), 4096)).toBe("ok");
+  });
+
+  it("rejects source pages that could redirect off-site", () => {
+    for (const bad of ["//evil.example", "/\\evil.example", "https://evil.example"]) {
+      expect(enquiryInputSchema.safeParse({ ...input, sourcePage: bad }).success, bad).toBe(false);
+    }
+  });
+});

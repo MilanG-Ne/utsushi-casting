@@ -57,18 +57,20 @@ const rows = pages.map((file) => {
   for (const [tag] of html.matchAll(/<script\b[^>]*>/g)) {
     // Legacy polyfills are marked noModule: modern browsers never download them.
     if (/\bnomodule\b/i.test(tag)) continue;
-    const src = tag.match(/\bsrc="([^"]+\.js)"/)?.[1];
+    const src = tag.match(/\bsrc="([^"]+\.js(?:\?[^"]*)?)"/)?.[1];
     if (src) srcs.add(src);
   }
   for (const [tag] of html.matchAll(/<link\b[^>]*>/g)) {
     if (!/\brel="(?:preload|modulepreload)"/.test(tag) || !/\bas="script"/.test(tag)) continue;
-    const href = tag.match(/\bhref="([^"]+\.js)"/)?.[1];
+    const href = tag.match(/\bhref="([^"]+\.js(?:\?[^"]*)?)"/)?.[1];
     if (href) srcs.add(href);
   }
   let external = 0;
   const missing = [];
-  for (const src of srcs) {
-    if (!src.startsWith("/_next/static/")) continue; // third-party (e.g. analytics) is not part of the bundle
+  for (const raw of srcs) {
+    // Accept an absolute assetPrefix; anything else outside /_next/static is third-party.
+    const src = raw.replace(/^https?:\/\/[^/]+/, "");
+    if (!src.startsWith("/_next/static/")) continue;
     const path = join(STATIC_DIR, decodeURIComponent(src.replace("/_next/static/", "").split("?")[0]));
     if (existsSync(path)) external += gz(path);
     else missing.push(src);
@@ -79,7 +81,9 @@ const rows = pages.map((file) => {
 });
 
 // GSAP chunks: contain GSAP code but are not part of any page's first load (dynamic import).
-const firstLoad = new Set(rows.flatMap((r) => r.srcs.map((s) => join(STATIC_DIR, s.replace("/_next/static/", "")))));
+const firstLoad = new Set(
+  rows.flatMap((r) => r.srcs.map((s) => join(STATIC_DIR, s.replace(/^https?:\/\/[^/]+/, "").replace("/_next/static/", "").split("?")[0]))),
+);
 const lazy = walk(join(STATIC_DIR, "chunks"))
   .filter((f) => f.endsWith(".js") && !firstLoad.has(f))
   .filter((f) => /GreenSock|ScrollTrigger/.test(readFileSync(f, "utf8")))

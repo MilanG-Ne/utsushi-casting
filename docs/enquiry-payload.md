@@ -98,24 +98,28 @@ five minutes old. See `lib/enquiries/signature.ts`.
 | `2xx` | Delivered; the outbox record is removed. Body may include `{ "crmId": "..." }`. |
 | `409` | Treated as delivered (the CRM already has this `Idempotency-Key`). |
 | `408`, `429`, `5xx`, timeout (4 s), network error | Retryable: kept in the outbox and retried. |
-| Other `4xx` | Permanent: dead-lettered at once and emailed to the team for manual entry. |
+| Other `4xx`, or any `3xx` redirect | Permanent: emailed to the team for manual entry, then dead-lettered. Redirects are never followed, because a redirected POST would arrive as a bodiless GET. |
 
-Receivers must be idempotent on `Idempotency-Key`: the same enquiry can arrive more than once
-(for example when a response is lost after the CRM committed it).
+Receivers must be idempotent on `Idempotency-Key` (which always equals the signed `id`): the
+same enquiry can arrive more than once, for example when a response is lost after the CRM
+committed it.
 
 ## Delivery guarantees
 
 ```text
 POST /api/enquiries
+  ├─ origin check, 64 KB body cap (also for chunked uploads), per-instance rate limit
   ├─ validate input (zod) ────────────── 422 with field names, or 303 to #enquiry-invalid
-  ├─ outbox.put(record)                   write-ahead, before any network call
+  ├─ outbox.put(record) + claim           write-ahead, scheduled +1 min, locked for this request
   ├─ CRM attempt 1 → (300 ms) → attempt 2
   │    ├─ delivered → outbox.remove → 200 { status: "delivered", id }
   │    └─ failed    → email the team + schedule retry → 202 { status: "queued", id }
   └─ no durable outbox and no email sent → 503 { status: "failed" } (the form shows the studio email)
 
 Retries (same payload, same Idempotency-Key):
-  +1 min, +5 min, +15 min, +1 h, +3 h, +6 h, +12 h, +24 h → dead letter + "manual entry" email
+  +1 min, +5 min, +15 min, +1 h, +3 h, +6 h, +12 h, +24 h → "manual entry" email → dead letter
+  (if that email cannot be sent, the record stays pending and is retried hourly)
+Concurrent drains: each record is claimed (SET NX PX) and re-read before delivery
 Triggers: after() at the end of every submission, Vercel Cron (daily on Hobby),
           and the optional "Retry queued enquiries" GitHub workflow (every 15 minutes)
 ```
@@ -126,7 +130,9 @@ or an email that was actually sent (Resend). If none of these is available, the 
 `503` and the form shows the studio's email address instead of pretending.
 
 Logs are structured JSON and contain only the enquiry ID, attempt counts and error classes;
-names, email addresses and messages are never logged.
+names, email addresses, messages and client-library error messages (which can embed the
+failed command) are never logged. No-JavaScript posts are only ever redirected to the
+site's own contact pages.
 
 ## Configuration
 

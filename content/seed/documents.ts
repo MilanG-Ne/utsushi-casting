@@ -37,11 +37,11 @@ const homePage = {
   _type: "page",
   key: "home",
   title: ls("Home", "ホーム"),
-  eyebrow: ls("Casting studio · Tokyo & London", "キャスティングスタジオ・東京／ロンドン"),
+  eyebrow: ls("Casting studio · Tokyo & London", "キャスティングスタジオ｜東京・ロンドン"),
   heading: ls("The right face for the frame, in English, Japanese or both.", "その役にふさわしい顔を。日本語でも、英語でも、その両方でも。"),
   intro: lt(
     "We are a casting studio for productions that cross languages. From bilingual leads to native-speaker day players and voice casts, we find performers who are as convincing in the room as they are on screen.",
-    "私たちは、言語をまたぐ作品のためのキャスティングスタジオです。バイリンガルの主演から、ネイティブスピーカーの端役、吹替キャストまで、現場でも画面の中でも説得力のある俳優を見つけ出します。",
+    "私たちは、言語をまたぐ作品のためのキャスティングスタジオです。バイリンガルの主演から、ネイティブスピーカーの端役、吹替キャストまで、オーディションでも画面の中でも説得力のある俳優・声優を見つけ出します。",
   ),
   stats: keyed("stat", [
     { _type: "stat", value: ls("1,400+", "1,400以上"), label: ls("roles cast since 2014", "2014年以来の配役数") },
@@ -68,7 +68,7 @@ const homePage = {
       title: ls("Read the script in both languages", "両言語で脚本を読み込む"),
       body: lt(
         "Before we open a call, we break down every role with the director in the language it will be performed in, including dialect, register and how much of each language the character needs.",
-        "募集を始める前に、監督とともにすべての役柄を、演じられる言語で読み解きます。方言や話し方の硬さ、その人物にどの程度の語学力が必要かまで洗い出します。",
+        "募集を始める前に、監督とともにすべての役柄を、実際に演じる言語で読み解きます。方言や言葉づかい、その人物にそれぞれの言語がどの程度必要かまで洗い出します。",
       ),
     },
     {
@@ -76,7 +76,7 @@ const homePage = {
       title: ls("Search beyond the usual lists", "いつものリストの外まで探す"),
       body: lt(
         "Agencies, drama schools, community theatres and open calls in both countries. For bilingual roles we test language as carefully as performance.",
-        "両国の事務所、演劇学校、地域の劇団、そして公開オーディションまで。バイリンガルの役では、演技と同じくらい丁寧に語学力を確かめます。",
+        "両国の事務所、養成所・演劇学校、地域の劇団、そして公開オーディションまで。バイリンガルの役では、演技と同じくらい丁寧に語学力を確かめます。",
       ),
     },
     {
@@ -84,7 +84,7 @@ const homePage = {
       title: ls("Run sessions that travel", "国境を越えるオーディション"),
       body: lt(
         "Self-tapes with bilingual readers, then in-room or remote callbacks timed for both time zones, with everything shared on one review link.",
-        "バイリンガルの読み手と組んだセルフテープから、両国の時差に合わせた対面またはリモートのコールバックまで。すべてを一つの確認用リンクで共有します。",
+        "バイリンガルの相手役と撮るセルフテープから、両国の時差に合わせた対面またはリモートのコールバックまで。すべてを一つの確認用リンクで共有します。",
       ),
     },
     {
@@ -92,7 +92,7 @@ const homePage = {
       title: ls("Close the deals in both markets", "両国の慣習に沿って契約まで"),
       body: lt(
         "We negotiate with agents in Tokyo and London, coordinate availability and travel with your production office, and stay on until the last role is signed.",
-        "東京とロンドン双方のエージェントと交渉し、スケジュールや渡航の調整を制作部と連携して進めます。最後の役が決まるまで伴走します。",
+        "東京の芸能事務所、ロンドンのエージェントの双方と交渉し、スケジュールや渡航の調整を制作部と連携して進めます。最後の一人の契約が結ばれるまで伴走します。",
       ),
     },
   ]),
@@ -122,7 +122,7 @@ const workPage = {
     title: ls("Work", "実績"),
     description: lt(
       "Selected casting work by Utsushi Casting: bilingual drama, animated features and campaigns cast across Japan and the UK.",
-      "ウツシ・キャスティングの主な実績。日英のバイリンガルドラマやアニメーション映画など、両国で手がけたキャスティング事例をご紹介します。",
+      "ウツシ・キャスティングの主な実績。日英バイリンガル・ドラマ、長編アニメーション映画、広告キャンペーンなど、日本とイギリスで手がけたキャスティング事例をご紹介します。",
     ),
   },
 };
@@ -148,7 +148,7 @@ const contactPage = {
     `## お問い合わせ後の流れ
 
 - 内容を拝見し、確認事項または簡単なご提案をお送りします。
-- 進められそうな場合は、監督またはプロデューサーとの打ち合わせを設定します。
+- お引き受けできる場合は、監督またはプロデューサーとの打ち合わせを設定します。
 - 1週間以内に、お見積りとキャスティングのスケジュールをお送りします。`,
   ),
   seo: {
@@ -156,7 +156,7 @@ const contactPage = {
     title: ls("Contact", "お問い合わせ"),
     description: lt(
       "Start a casting enquiry with Utsushi Casting. We reply within two working days, in English or Japanese.",
-      "ウツシ・キャスティングへのキャスティングのご相談はこちら。日本語または英語で、2営業日以内にご返信します。",
+      "映画・ドラマ・広告・吹替のキャスティングのご相談はウツシ・キャスティングへ。日本語または英語で、2営業日以内にご返信します。",
     ),
   },
 };
@@ -186,26 +186,26 @@ That is most of our work. We cast whole productions, or partner with a lead cast
 Fluency on a CV is not the same as performing in a language. Every bilingual shortlist we send has been heard reading in both languages with a native-speaking reader, and is labelled honestly: native, fluent or coached.`,
     `## 国際共同制作のために
 
-国際共同制作の現場では、キャスティングディレクターが一人では足りないことがほとんどです。二つの言語で役柄表を扱い、東京のエージェントからのメールとマンチェスターから届いたセルフテープを並べて確認し、第二言語でも場面を背負える俳優を見極められる存在が必要です。
+国際共同制作の現場では、キャスティングディレクターが一人では足りないことがほとんどです。二つの言語で役柄表を扱い、東京の事務所からのメールとマンチェスターから届いたセルフテープを並べて確認し、第二言語でも場面を背負える俳優を見極められる存在が必要です。
 
 それが私たちの仕事の大半です。作品全体のキャスティングを担うことも、一方の国のキャスティングディレクターと組み、もう一方の国を担当することもあります。
 
 ## バイリンガルの役を成立させるもの
 
-履歴書に書かれた語学力と、その言語で演じる力は別物です。私たちがお送りするバイリンガルの候補者リストは、すべてネイティブの読み手と両言語で読み合わせを行ったうえで、「ネイティブ」「流暢」「指導あり」と正直に表記しています。`,
+プロフィールに書かれた語学力と、その言語で演じる力は別物です。私たちがお送りするバイリンガルの候補者リストでは、全員についてネイティブの相手役と両言語での読み合わせを行ったうえで、語学レベルを「ネイティブ」「流暢」「要指導」のいずれかで正直に明記しています。`,
   ),
   deliverables: keyed("del", [
     ls("Character breakdowns in English and Japanese", "日英両言語での役柄表（ブレイクダウン）作成"),
     ls("Shortlists with the language level noted for every performer", "俳優ごとの語学レベルを明記した候補者リスト"),
     ls("Self-tape and callback sessions in Tokyo, London and online", "東京・ロンドン・オンラインでのセルフテープ審査とコールバック"),
-    ls("Offers, deal memos and agent negotiation in both markets", "両国でのオファー、条件確認書の作成、エージェントとの交渉"),
+    ls("Offers, deal memos and agent negotiation in both markets", "両国でのオファー、条件確認書（ディールメモ）の作成、事務所・エージェントとの交渉"),
     ls("Daily casting reports shared on one review link", "一つの確認用リンクで共有する日次キャスティングレポート"),
   ]),
   process: keyed("step", [
     { _type: "step", title: ls("Breakdown", "役柄の整理"), body: lt("We read the script with you and agree how much of each language every role needs.", "脚本を一緒に読み込み、役ごとに必要な言語の範囲をすり合わせます。") },
     { _type: "step", title: ls("Search", "候補者探し"), body: lt("Agency submissions, our own database and targeted open calls in both countries.", "事務所からの推薦、自社データベース、両国での的を絞った公開募集を組み合わせます。") },
     { _type: "step", title: ls("Sessions", "オーディション"), body: lt("Self-tapes first, then callbacks with the director in the room or on a call.", "まずセルフテープで選考し、その後、監督同席の対面またはオンラインでコールバックを行います。") },
-    { _type: "step", title: ls("Contracts", "契約"), body: lt("We clear availability, negotiate deals and hand signed paperwork to your production office.", "スケジュールを確保して条件を交渉し、署名済みの書類を制作部にお渡しします。") },
+    { _type: "step", title: ls("Contracts", "契約"), body: lt("We clear availability, negotiate deals and hand signed paperwork to your production office.", "スケジュールを押さえて出演条件を交渉し、署名済みの書類を制作部にお渡しします。") },
   ]),
   faq: keyed("faq", [
     {
@@ -213,7 +213,7 @@ Fluency on a CV is not the same as performing in a language. Every bilingual sho
       question: ls("Can you cast just the Japanese-speaking roles on a UK production?", "イギリスの作品で、日本語を話す役だけをお願いできますか？"),
       answer: lt(
         "Yes. Partnering with a UK lead casting director is one of the most common ways we work. We take the roles that need Japanese and work to their schedule and systems.",
-        "はい、可能です。イギリス側のキャスティングディレクターと組む形は、私たちの最も一般的な進め方の一つです。日本語が必要な役を担当し、先方のスケジュールや進め方に合わせて対応します。",
+        "はい、可能です。イギリス側のキャスティングディレクターと組むのは、私たちが特によくお受けする形です。日本語が必要な役を担当し、先方のスケジュールや進め方に合わせて対応します。",
       ),
     },
     {
@@ -221,7 +221,7 @@ Fluency on a CV is not the same as performing in a language. Every bilingual sho
       question: ls("How long does casting a series usually take?", "ドラマシリーズのキャスティングには、通常どのくらいかかりますか？"),
       answer: lt(
         "For an eight-part drama with forty to fifty speaking roles, plan on eight to twelve weeks from breakdown to final offers. Leads can be faster when offers go out directly.",
-        "セリフのある役が40〜50名規模の全8話のドラマであれば、役柄表の作成から最終オファーまで8〜12週間を見込んでください。主演は直接オファーの場合、より短期間で決まることもあります。",
+        "セリフのある役が40〜50ほどある全8話のドラマの場合、役柄表の作成から最終オファーまで8〜12週間が目安です。主演は直接オファーの場合、より短期間で決まることもあります。",
       ),
     },
   ]),
@@ -230,7 +230,7 @@ Fluency on a CV is not the same as performing in a language. Every bilingual sho
     title: ls("Film & Television Casting", "映画・ドラマのキャスティング"),
     description: lt(
       "Bilingual film and television casting from Tokyo and London: co-productions, bilingual leads and native-speaker supporting roles.",
-      "東京とロンドンから手がける映画・ドラマのキャスティング。国際共同制作、バイリンガルの主演、ネイティブの脇役まで対応します。",
+      "東京とロンドンから手がける映画・ドラマのキャスティング。国際共同制作に強く、バイリンガルの主演からネイティブスピーカーの脇役まで対応します。",
     ),
   },
 };
@@ -262,17 +262,17 @@ Buyouts work differently in Japan and the UK. We agree media, territory and term
 
 ## 使用条件は撮影前に明確に
 
-出演料の買い取り条件は、日本とイギリスで考え方が異なります。撮影前にすべての出演者のエージェントと媒体・地域・期間を合意し、日英両言語の書面に残すため、必要な場所で安心して広告を展開できます。`,
+出演料の買い取り条件は、日本とイギリスで考え方が異なります。撮影前に出演者ごとの所属事務所・エージェントと媒体・地域・期間を取り決め、日英両言語の書面に残すため、必要な場所で安心して広告を展開できます。`,
   ),
   deliverables: keyed("del", [
     ls("Street and social casting for real people", "一般の方を対象としたストリート・SNSキャスティング"),
     ls("Actor and talent casting through agencies in both countries", "両国の事務所を通じた俳優・タレントのキャスティング"),
     ls("Fitting and audition sessions with client viewing links", "クライアント確認用リンク付きのフィッティング・オーディション"),
     ls("Usage and buyout agreements in English and Japanese", "日英両言語での使用条件・買い取り契約書"),
-    ls("Model releases checked against every market", "出稿するすべての市場を想定した肖像使用許諾の確認"),
+    ls("Model releases checked against every market", "出稿するすべての市場を想定した肖像権使用同意書（モデルリリース）の確認"),
   ]),
   process: keyed("step", [
-    { _type: "step", title: ls("Brief", "ブリーフ"), body: lt("We agree the look, the markets and the usage before anyone is approached.", "誰かに声をかける前に、ビジュアルの方向性、出稿市場、使用条件をすり合わせます。") },
+    { _type: "step", title: ls("Brief", "ブリーフ"), body: lt("We agree the look, the markets and the usage before anyone is approached.", "候補者に声をかける前に、ビジュアルの方向性、出稿市場、使用条件をすり合わせます。") },
     { _type: "step", title: ls("Street and agency search", "ストリートと事務所での候補者探し"), body: lt("Real-people scouting and agency submissions, presented together.", "一般の方のスカウトと事務所からの推薦を、まとめてご提案します。") },
     { _type: "step", title: ls("Casting day", "キャスティング当日"), body: lt("Sessions in Tokyo or London, streamed to the client and the agency.", "東京またはロンドンでオーディションを行い、クライアントと代理店にも配信します。") },
     { _type: "step", title: ls("Clearance", "権利処理"), body: lt("Usage agreed and signed before the shoot day.", "撮影日までに使用条件を合意し、署名を完了させます。") },
@@ -300,7 +300,7 @@ Buyouts work differently in Japan and the UK. We agree media, territory and term
     title: ls("Commercial & Brand Casting", "広告・ブランドのキャスティング"),
     description: lt(
       "Commercial casting for campaigns in Japan and the UK: real people, actors and talent, with usage cleared for every market.",
-      "日本とイギリスで展開する広告のキャスティング。一般の方から俳優・タレントまで、市場ごとの権利処理まで対応します。",
+      "日本とイギリスで展開する広告のキャスティング。一般の方から俳優・タレントまで、出稿する市場ごとの権利処理も含めて対応します。",
     ),
   },
 };
@@ -311,7 +311,7 @@ const voiceService = {
   order: 3,
   title: ls("Voice & Localization Casting", "吹替・ローカライズのキャスティング"),
   slug: slug("voice-and-localization"),
-  shortSummary: ls("Dubbing, games and bilingual voice talent.", "吹替、ゲーム、バイリンガルの声優。"),
+  shortSummary: ls("Dubbing, games and bilingual voice talent.", "吹替、ゲーム、バイリンガル声優のキャスティング。"),
   summary: lt(
     "Voice casting for dubbing, animation and games, matching performances across English and Japanese without losing the character.",
     "吹替、アニメーション、ゲームのボイスキャスティング。キャラクターの魅力を損なうことなく、日英の演技をつなぎます。",
@@ -326,20 +326,20 @@ A good dub sounds like the character, not like the original actor. We start from
 ## Directors who speak both
 
 Every session we cast can be supported by a bilingual voice director, so notes about intention travel between the languages without being flattened by translation.`,
-    `## 声ではなく、演技を合わせる
+    `## 声だけでなく、演技を合わせる
 
 優れた吹替は、オリジナルの俳優ではなく、キャラクターそのものに聞こえます。私たちは、リズム、年齢感、温かさ、冗談の前の息づかいといったオリジナルの演技から出発し、それを翻訳先の言語で表現できる声優を探します。
 
 ## 両言語を話すディレクター
 
-私たちがキャスティングを担当する収録には、バイリンガルの音響演出家が付くことができます。演技の意図に関する指示が、翻訳によって平板になることなく、言語の間で伝わります。`,
+私たちがキャスティングを担当した収録には、ご希望に応じてバイリンガルのボイスディレクターが立ち会います。演技の意図に関する指示が、翻訳によって平板になることなく、言語の間で伝わります。`,
   ),
   deliverables: keyed("del", [
     ls("Voice matching against the original performance", "オリジナルの演技を踏まえたボイスマッチング"),
     ls("Bilingual demo reels and test reads for every shortlisted actor", "候補者全員分のバイリンガルのデモ音源とテスト収録"),
     ls("English dubs of Japanese originals, and Japanese dubs of English originals", "日本語作品の英語吹替、英語作品の日本語吹替"),
     ls("Game casting for large ensembles, including pickup sessions", "追加収録にも対応する大規模キャストのゲームキャスティング"),
-    ls("Bilingual voice directors for recording sessions", "収録に立ち会うバイリンガルの音響演出家"),
+    ls("Bilingual voice directors for recording sessions", "収録に立ち会うバイリンガルのボイスディレクター"),
   ]),
   process: keyed("step", [
     { _type: "step", title: ls("Listen", "聴き込む"), body: lt("We study the original performance scene by scene and write voice briefs in both languages.", "オリジナルの演技を場面ごとに分析し、日英両言語でボイスブリーフを作成します。") },
@@ -370,7 +370,7 @@ Every session we cast can be supported by a bilingual voice director, so notes a
     title: ls("Voice & Localization Casting", "吹替・ローカライズのキャスティング"),
     description: lt(
       "Voice casting for dubbing, animation and games, matching performances between English and Japanese.",
-      "吹替、アニメーション、ゲームのボイスキャスティング。日英の演技を丁寧につなぎます。",
+      "吹替、アニメーション、ゲームのボイスキャスティング。オリジナルの演技を踏まえ、日本語と英語の間で声と演技を丁寧にマッチングします。",
     ),
   },
 };
@@ -384,11 +384,11 @@ const harbourLights = {
   client: ls("Saltmarsh Films and Nishikaze Television (fictional)", "ソルトマーシュ・フィルムズ／西風テレビ（架空）"),
   year: 2025,
   format: ls("Eight-part bilingual drama series", "全8話のバイリンガル・ドラマシリーズ"),
-  locations: ls("Liverpool and Yokohama", "リバプール、横浜"),
+  locations: ls("Liverpool and Yokohama", "リバプール・横浜"),
   rolesCast: 46,
   summary: lt(
     "A UK–Japan co-production about two port cities and the family split between them. We cast 46 speaking roles across Liverpool and Yokohama, including four leads who perform in both languages.",
-    "二つの港町と、その間で離ればなれになった家族を描く日英共同制作のドラマ。リバプールと横浜で46のセリフのある役をキャスティングし、そのうち4人の主演は日英両言語で演じています。",
+    "二つの港町と、その間で離ればなれになった家族を描く日英共同制作のドラマ。リバプールと横浜でセリフのある46役をキャスティングし、そのうち主演の4人は日英両言語で演じています。",
   ),
   heroImage: image("harbour-lights", "Out-of-focus city lights along a harbour at night, reflected in dark water.", "夜の港に並ぶぼやけた街の灯りと、暗い水面に映るその反射。"),
   video: {
@@ -425,21 +425,21 @@ For the family resemblance, we cast the youngest generation first and built the 
 > “We stopped worrying about the language scenes in week two.” — Producer, Saltmarsh Films (fictional)`,
     `## ご依頼の内容
 
-『ハーバー・ライツ』は、ある一家の三世代を通して、リバプールと横浜を行き来する物語です。セリフのおよそ4割が日本語、半分が英語で、残りは場面の途中で言語が切り替わります。主演の4人には、両言語で完全に説得力があること、そして二つの国にまたがる家族として自然に見えることが求められました。
+『ハーバー・ライツ』は、ある一家の三世代を通して、リバプールと横浜を行き来する物語です。セリフのおよそ4割が日本語、5割が英語で、残りの1割は場面の途中で言語が切り替わります。主演の4人には、どちらの言語でも説得力のある芝居ができること、そして二つの国にまたがる家族として自然に見えることが求められました。
 
 ## 探し方
 
-候補者探しは両方のスタジオで同時に進めました。ロンドンでは事務所に加え、日系コミュニティの劇団にも声をかけ、東京ではイギリスでの生活経験や演技の訓練経験がある俳優を中心に探しました。バイリンガルの候補者全員に、それぞれの言語のネイティブの読み手と同じ二つの場面を読んでもらい、プロデューサーには両方の読み合わせを並べて確認していただきました。
+候補者探しは両方のスタジオで同時に進めました。ロンドンでは事務所に加え、日系コミュニティの劇団にも声をかけ、東京ではイギリスでの生活経験や演技の訓練経験がある俳優を中心に探しました。バイリンガルの候補者全員に、それぞれの言語のネイティブの相手役と同じ二つの場面を演じてもらい、プロデューサーには両方の読み合わせを並べて確認していただきました。
 
-家族としての似通いを出すために、まず最も若い世代を決め、そこから上の世代を組み立てました。三つの時代すべてにわたる写真ボードを使って検討しています。
+家族らしい面影が出るよう、まず最も若い世代を決め、そこから上の世代を組み立てていきました。検討には、三つの時代すべてを並べた写真ボードを使っています。
 
 ## 制作にもたらしたもの
 
 - バイリンガルの主演4名（ロンドンから2名、東京から2名）
 - 42名の脇役・端役。全員がその場面の言語のネイティブスピーカー
-- リバプール訛りと横浜言葉の方言指導者の候補リスト。当社のネットワークを通じて手配
+- リバプール訛りと横浜言葉の方言指導者の候補リスト。私たちのネットワークを通じて手配
 
-> 「2週目には、言語の場面について心配することはなくなりました」——ソルトマーシュ・フィルムズ プロデューサー（架空）`,
+> 「2週目にはもう、言語面の心配はなくなっていました」——ソルトマーシュ・フィルムズ プロデューサー（架空）`,
   ),
   outcomes: keyed("out", [
     { _type: "stat", value: ls("46", "46"), label: ls("speaking roles cast", "セリフのある役") },
@@ -449,7 +449,7 @@ For the family resemblance, we cast the youngest generation first and built the 
   credits: keyed("cr", [
     { _type: "credit", role: ls("Casting director, London", "キャスティングディレクター（ロンドン）"), name: ls("Hannah Ellery", "ハンナ・エラリー") },
     { _type: "credit", role: ls("Casting director, Tokyo", "キャスティングディレクター（東京）"), name: ls("Natsume Arisawa", "有沢なつめ") },
-    { _type: "credit", role: ls("Casting associate", "キャスティング・アソシエイト"), name: ls("Kenta Oribe", "織部健太") },
+    { _type: "credit", role: ls("Casting associate", "キャスティングアソシエイト"), name: ls("Kenta Oribe", "織部健太") },
   ]),
   services: [ref(SERVICE.film)],
   seo: {
@@ -457,7 +457,7 @@ For the family resemblance, we cast the youngest generation first and built the 
     title: ls("Harbour Lights: bilingual drama casting", "『ハーバー・ライツ』バイリンガル・ドラマのキャスティング"),
     description: lt(
       "How we cast 46 speaking roles and four bilingual leads for Harbour Lights, a UK–Japan drama co-production set in Liverpool and Yokohama.",
-      "リバプールと横浜を舞台にした日英共同制作ドラマ『ハーバー・ライツ』で、46の役と4人のバイリンガル主演をキャスティングした事例です。",
+      "リバプールと横浜を舞台にした日英共同制作ドラマ『ハーバー・ライツ』で、セリフのある46役とバイリンガルの主演4人をキャスティングした事例です。",
     ),
   },
 };
@@ -471,11 +471,11 @@ const lanternKeeper = {
   client: ls("Studio Kazahana (fictional)", "スタジオ風花（架空）"),
   year: 2026,
   format: ls("Animated feature, English dub", "長編アニメーション映画（英語吹替版）"),
-  locations: ls("Tokyo and London, remote sessions", "東京、ロンドン（リモート収録）"),
+  locations: ls("Tokyo and London, remote sessions", "東京・ロンドン（リモート収録）"),
   rolesCast: 18,
   summary: lt(
     "An English dub of a Japanese animated feature. We matched 18 voice roles to the original performances, including a lead who ages from eleven to sixty over the course of the film.",
-    "日本の長編アニメーション映画の英語吹替版。オリジナルの演技に合わせて18の役をキャスティングしました。物語の中で11歳から60歳までを生きる主人公の声も含まれます。",
+    "日本の長編アニメーション映画の英語吹替版。オリジナルの演技に合わせて18役をキャスティングしました。その中には、物語の中で11歳から60歳まで年を重ねる主人公も含まれます。",
   ),
   heroImage: image("lantern-keeper", "Warm lantern lights floating above layered mountain ridges at dusk.", "夕暮れの山並みの上に浮かぶ、温かな灯籠の光。"),
   video: {
@@ -483,7 +483,7 @@ const lanternKeeper = {
     title: ls("The Lantern Keeper voice casting reel", "『ともしびの番人』ボイスキャスティング映像"),
     description: lt(
       "A 15-second abstract clip of drifting lantern light over mountains, made for this demo. No performers and no audio.",
-      "山並みの上をゆらめく灯籠の光を描いた15秒の抽象映像です。デモ用に制作したもので、出演者と音声は含まれていません。",
+      "山並みの上を漂う灯籠の光を描いた15秒の抽象映像です。デモ用に制作したもので、出演者と音声は含まれていません。",
     ),
     url: "/media/video/lantern-keeper.mp4",
     poster: image("lantern-keeper", "Warm lantern lights floating above layered mountain ridges at dusk.", "夕暮れの山並みの上に浮かぶ、温かな灯籠の光。"),
@@ -516,23 +516,23 @@ The lead was the hardest call: one actor for the character's whole life, or two?
 
 オリジナルを64の参考クリップに分け、役ごとに日英両言語でボイスブリーフを作成しました。候補者には同じ三つの場面を収録してもらい、監督にはすべてのテスト音源をオリジナルのクリップと並べて聴いていただきました。
 
-最も難しかったのは主人公の判断です。生涯を一人の声優が演じるべきか、二人で分けるべきか。両方を試した結果、軽やかで力みのない声を持つ一人の声優が作品全体をまとめられると分かり、監督は彼女を選びました。
+最も難しかったのは主人公の配役です。生涯を一人の声優が演じるべきか、二人で分けるべきか。両方を試した結果、軽やかで力みのない声を持つ一人の声優が作品全体をまとめられると分かり、監督は彼女を選びました。
 
 ## 制作にもたらしたもの
 
 - 5週間で18役のキャスティングを完了。初回収録後の再キャスティングはなし
-- すべての収録にバイリンガルの音響演出家が立ち会い
+- すべての収録にバイリンガルのボイスディレクターが立ち会い
 - 配給会社の続編企画に向けて、テスト音源をアーカイブ`,
   ),
   outcomes: keyed("out", [
     { _type: "stat", value: ls("18", "18"), label: ls("voice roles cast", "キャスティングした役") },
-    { _type: "stat", value: ls("5 weeks", "5週間"), label: ls("from brief to final cast", "ブリーフから最終決定まで") },
+    { _type: "stat", value: ls("5 weeks", "5週間"), label: ls("from brief to final cast", "ブリーフからキャスト決定まで") },
     { _type: "stat", value: ls("0", "0"), label: ls("recasts after the first session", "初回収録後の再キャスティング") },
   ]),
   credits: keyed("cr", [
-    { _type: "credit", role: ls("Voice casting director", "ボイスキャスティング・ディレクター"), name: ls("Rhys Calloway", "リース・キャロウェイ") },
+    { _type: "credit", role: ls("Voice casting director", "ボイスキャスティングディレクター"), name: ls("Rhys Calloway", "リース・キャロウェイ") },
     { _type: "credit", role: ls("Voice casting, Tokyo", "ボイスキャスティング（東京）"), name: ls("Natsume Arisawa", "有沢なつめ") },
-    { _type: "credit", role: ls("Bilingual voice director", "バイリンガル音響演出"), name: ls("Mika Sorensen", "ミカ・ソレンセン") },
+    { _type: "credit", role: ls("Bilingual voice director", "バイリンガル・ボイスディレクター"), name: ls("Mika Sorensen", "ミカ・ソレンセン") },
   ]),
   services: [ref(SERVICE.voice)],
   seo: {

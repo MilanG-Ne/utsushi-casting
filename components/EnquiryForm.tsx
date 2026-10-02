@@ -107,6 +107,8 @@ export function EnquiryForm({ lang, labels, email, sourcePage }: { lang: Locale;
       </p>
     ) : null;
   const requiredTag = <span className="field-tag">{labels.required}</span>;
+  // Japanese UI uses full-width parentheses.
+  const optional = lang === "ja" ? `（${labels.optional}）` : `(${labels.optional})`;
   const errorList = Object.entries(errors) as [FieldName, string][];
 
   return (
@@ -157,7 +159,7 @@ export function EnquiryForm({ lang, labels, email, sourcePage }: { lang: Locale;
 
         <div className="field">
           <label htmlFor="enq-company">
-            {labels.company} <span className="field-optional">({labels.optional})</span>
+            {labels.company} <span className="field-optional">{optional}</span>
           </label>
           <input id="enq-company" name="company" type="text" autoComplete="organization" maxLength={160} />
         </div>
@@ -181,14 +183,14 @@ export function EnquiryForm({ lang, labels, email, sourcePage }: { lang: Locale;
 
         <div className="field">
           <label htmlFor="enq-projectTitle">
-            {labels.projectTitle} <span className="field-optional">({labels.optional})</span>
+            {labels.projectTitle} <span className="field-optional">{optional}</span>
           </label>
           <input id="enq-projectTitle" name="projectTitle" type="text" maxLength={160} />
         </div>
 
         <div className="field">
           <label htmlFor="enq-budget">
-            {labels.budget} <span className="field-optional">({labels.optional})</span>
+            {labels.budget} <span className="field-optional">{optional}</span>
           </label>
           <select id="enq-budget" name="budget" defaultValue="">
             <option value="">{labels.choose}</option>
@@ -202,7 +204,7 @@ export function EnquiryForm({ lang, labels, email, sourcePage }: { lang: Locale;
 
         <div className="field field--wide">
           <label htmlFor="enq-timeline">
-            {labels.timeline} <span className="field-optional">({labels.optional})</span>
+            {labels.timeline} <span className="field-optional">{optional}</span>
           </label>
           <p id="enq-timeline-help" className="field-help">
             {labels.timelineHelp}

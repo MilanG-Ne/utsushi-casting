@@ -60,7 +60,9 @@ export async function ContactPage({ lang }: { lang: Locale }) {
             {t.contact.invalidHeading}
           </p>
           <p id="enquiry-error" className="target-notice form-outcome form-outcome--error" tabIndex={-1}>
-            {t.contact.errorHeading} {t.contact.errorBody.replace("{email}", settings.email)}
+            {t.contact.errorHeading}
+            {lang === "ja" ? "" : " "}
+            {t.contact.errorBody.replace("{email}", settings.email)}
           </p>
           <EnquiryForm lang={lang} labels={t.contact} email={settings.email} sourcePage={href(ROUTE, lang)} />
         </section>

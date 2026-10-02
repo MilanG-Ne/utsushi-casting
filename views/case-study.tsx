@@ -68,7 +68,8 @@ export async function CaseStudyPage({ lang, params }: { lang: Locale; params: Pa
         <header className="container page-intro case-intro">
           <Breadcrumbs items={crumbs} label={t.a11y.breadcrumb} />
           <p className="eyebrow">
-            <Txt value={study.format} /> · {study.year}
+            <Txt value={study.format} />
+            {lang === "ja" ? `（${study.year}年）` : ` · ${study.year}`}
           </p>
           <h1 className="display-1">
             <Txt value={study.title} />

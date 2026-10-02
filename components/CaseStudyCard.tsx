@@ -26,7 +26,8 @@ export function CaseStudyCard({ study, lang, ctaLabel, headingLevel = 3, sizes =
         <ResponsiveImage image={study.heroImage} sizes={sizes} className="work-card__media" priority={priority} />
         <div className="work-card__body">
           <p className="work-card__meta">
-            <Txt value={study.format} /> · {study.year}
+            <Txt value={study.format} />
+            {lang === "ja" ? `（${study.year}年）` : ` · ${study.year}`}
           </p>
           <Heading className="work-card__title">
             <Txt value={study.title} />

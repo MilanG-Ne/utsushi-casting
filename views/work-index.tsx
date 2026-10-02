@@ -2,12 +2,14 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { CallToAction } from "@/components/CallToAction";
 import { CaseStudyCard } from "@/components/CaseStudyCard";
 import { PageShell } from "@/components/PageShell";
+import { JsonLd } from "@/components/JsonLd";
 import { Txt } from "@/components/Txt";
 import { getCaseStudies, getPage } from "@/lib/content";
 import type { Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { href } from "@/lib/i18n/routes";
 import { buildMetadata } from "@/lib/seo/metadata";
+import { pageGraph } from "@/lib/seo/structured-data";
 
 const ROUTE = { name: "work" } as const;
 
@@ -24,8 +26,18 @@ export async function WorkIndexPage({ lang }: { lang: Locale }) {
     { label: page.title.text, href: href(ROUTE, lang), lang: page.title.lang },
   ];
 
+  const structuredData = await pageGraph({
+    lang,
+    route: ROUTE,
+    type: "CollectionPage",
+    title: page.seo.title,
+    description: page.seo.description,
+    crumbs,
+  });
+
   return (
     <PageShell lang={lang} route={ROUTE}>
+      <JsonLd data={structuredData} />
       <header className="container page-intro">
         <Breadcrumbs items={crumbs} label={t.a11y.breadcrumb} />
         {page.eyebrow && <Txt as="p" className="eyebrow" value={page.eyebrow} />}

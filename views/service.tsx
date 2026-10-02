@@ -7,12 +7,15 @@ import { ArrowRight } from "@/components/Icons";
 import { PageShell } from "@/components/PageShell";
 import { ResponsiveImage } from "@/components/ResponsiveImage";
 import { RichText } from "@/components/RichText";
+import { JsonLd } from "@/components/JsonLd";
 import { Txt } from "@/components/Txt";
-import { getCaseStudiesForService, getNavServices, getService, getServiceSlugs } from "@/lib/content";
+import { getCaseStudiesForService, getNavServices, getService, getServiceSlugs, getSiteSettings } from "@/lib/content";
 import type { Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { href } from "@/lib/i18n/routes";
-import { buildMetadata } from "@/lib/seo/metadata";
+import { absoluteUrl, href } from "@/lib/i18n/routes";
+import { serviceNode } from "@/lib/seo/jsonld";
+import { buildMetadata, ogImageFor } from "@/lib/seo/metadata";
+import { pageGraph } from "@/lib/seo/structured-data";
 
 type Params = Promise<{ slug: string }>;
 
@@ -24,13 +27,24 @@ export async function serviceMetadata(lang: Locale, params: Params) {
   const { slug } = await params;
   const service = await getService(slug, lang);
   if (!service) return {};
-  return buildMetadata({ lang, route: { name: "service", slug }, title: service.seo.title, description: service.seo.description });
+  return buildMetadata({
+    lang,
+    route: { name: "service", slug },
+    title: service.seo.title,
+    description: service.seo.description,
+    image: ogImageFor(slug, lang, service.heroImage),
+  });
 }
 
 export async function ServicePage({ lang, params }: { lang: Locale; params: Params }) {
   const { slug } = await params;
   const t = getDictionary(lang);
-  const [service, related, all] = await Promise.all([getService(slug, lang), getCaseStudiesForService(slug, lang), getNavServices(lang)]);
+  const [service, related, all, settings] = await Promise.all([
+    getService(slug, lang),
+    getCaseStudiesForService(slug, lang),
+    getNavServices(lang),
+    getSiteSettings(lang),
+  ]);
   if (!service) notFound();
 
   const route = { name: "service", slug } as const;
@@ -40,8 +54,29 @@ export async function ServicePage({ lang, params }: { lang: Locale; params: Para
     { label: service.title.text, href: href(route, lang), lang: service.title.lang },
   ];
 
+  const pageUrl = absoluteUrl(href(route, lang));
+  const structuredData = await pageGraph({
+    lang,
+    route,
+    title: service.seo.title,
+    description: service.seo.description,
+    crumbs,
+    primaryImage: service.heroImage,
+    mainEntityId: `${pageUrl}#service`,
+    extra: [
+      serviceNode({
+        name: service.title.text,
+        description: service.summary.text,
+        pageUrl,
+        image: service.heroImage,
+        countries: settings.studios.map((s) => s.addressCountry).filter((c): c is string => Boolean(c)),
+      }),
+    ],
+  });
+
   return (
     <PageShell lang={lang} route={route}>
+      <JsonLd data={structuredData} />
       <article>
         <header className="container page-intro service-intro">
           <Breadcrumbs items={crumbs} label={t.a11y.breadcrumb} />

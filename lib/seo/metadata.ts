@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { Image } from "../content/types";
 import { LOCALE_META, otherLocales, type Locale } from "../i18n/config";
 import { absoluteUrl, href, hreflangMap, type AppRoute } from "../i18n/routes";
 import { SITE_NAME } from "../site";
@@ -6,12 +7,18 @@ import { SITE_NAME } from "../site";
 export type OgImage = { url: string; width: number; height: number; alt: string };
 
 export function defaultOgImage(lang: Locale): OgImage {
-  return {
-    url: `/media/og/utsushi-${lang}.png`,
-    width: 1200,
-    height: 630,
-    alt: SITE_NAME[lang],
-  };
+  return { url: `/media/og/default-${lang}.jpg`, width: 1200, height: 630, alt: SITE_NAME[lang] };
+}
+
+/**
+ * Open Graph image for a page with a hero image. Generated cards (scripts/media/og.py)
+ * exist for the seed content; images from Sanity are cropped to 1200×630 on its CDN.
+ */
+export function ogImageFor(key: string, lang: Locale, hero: Image): OgImage {
+  if (!hero.url.startsWith("/media/img/")) {
+    return { url: `${hero.url}?w=1200&h=630&fit=crop&fm=jpg&q=80`, width: 1200, height: 630, alt: hero.alt };
+  }
+  return { url: `/media/og/${key}-${lang}.jpg`, width: 1200, height: 630, alt: hero.alt };
 }
 
 type BuildMetadataInput = {

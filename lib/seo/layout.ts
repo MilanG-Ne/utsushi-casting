@@ -14,6 +14,7 @@ export function layoutMetadata(lang: Locale): Metadata {
     formatDetection: { telephone: false, email: false, address: false },
     icons: {
       icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+      apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
     },
   };
 }

@@ -4,13 +4,16 @@ import { CaseStudyCard } from "@/components/CaseStudyCard";
 import { ArrowRight } from "@/components/Icons";
 import { PageShell } from "@/components/PageShell";
 import { ServiceCard } from "@/components/ServiceCard";
+import { JsonLd } from "@/components/JsonLd";
 import { Txt } from "@/components/Txt";
 import { VideoFigure } from "@/components/VideoFigure";
 import { getPage, getServices } from "@/lib/content";
 import type { Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { href } from "@/lib/i18n/routes";
+import { absoluteUrl, href } from "@/lib/i18n/routes";
+import { videoNode } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/metadata";
+import { pageGraph } from "@/lib/seo/structured-data";
 
 const ROUTE = { name: "home" } as const;
 
@@ -35,8 +38,17 @@ export async function HomePage({ lang }: { lang: Locale }) {
   const t = getDictionary(lang);
   const [page, workPage, services] = await Promise.all([getPage("home", lang), getPage("work", lang), getServices(lang)]);
 
+  const structuredData = await pageGraph({
+    lang,
+    route: ROUTE,
+    title: page.seo.title,
+    description: page.seo.description,
+    extra: page.showreel ? [videoNode(page.showreel, absoluteUrl(href(ROUTE, lang)), lang, "showreel")] : [],
+  });
+
   return (
     <PageShell lang={lang} route={ROUTE}>
+      <JsonLd data={structuredData} />
       <section className="hero" aria-labelledby="hero-heading">
         <div className="container hero__inner">
           {page.eyebrow && <Txt as="p" className="eyebrow" value={page.eyebrow} />}

@@ -6,13 +6,16 @@ import { ArrowRight } from "@/components/Icons";
 import { PageShell } from "@/components/PageShell";
 import { ResponsiveImage } from "@/components/ResponsiveImage";
 import { RichText } from "@/components/RichText";
+import { JsonLd } from "@/components/JsonLd";
 import { Txt } from "@/components/Txt";
 import { VideoFigure } from "@/components/VideoFigure";
 import { getCaseStudies, getCaseStudy, getCaseStudySlugs, getPage } from "@/lib/content";
 import type { Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { href } from "@/lib/i18n/routes";
-import { buildMetadata } from "@/lib/seo/metadata";
+import { absoluteUrl, href } from "@/lib/i18n/routes";
+import { videoNode } from "@/lib/seo/jsonld";
+import { buildMetadata, ogImageFor } from "@/lib/seo/metadata";
+import { pageGraph } from "@/lib/seo/structured-data";
 
 type Params = Promise<{ slug: string }>;
 
@@ -30,12 +33,7 @@ export async function caseStudyMetadata(lang: Locale, params: Params) {
     title: study.seo.title,
     description: study.seo.description,
     type: "article",
-    image: {
-      url: study.heroImage.url.startsWith("/media/img/") ? `${study.heroImage.url}-1200.webp` : `${study.heroImage.url}?w=1200&h=630&fit=crop&fm=jpg`,
-      width: 1200,
-      height: study.heroImage.url.startsWith("/media/img/") ? 675 : 630,
-      alt: study.heroImage.alt,
-    },
+    image: ogImageFor(slug, lang, study.heroImage),
   });
 }
 
@@ -53,8 +51,19 @@ export async function CaseStudyPage({ lang, params }: { lang: Locale; params: Pa
     { label: study.title.text, href: href(route, lang), lang: study.title.lang },
   ];
 
+  const structuredData = await pageGraph({
+    lang,
+    route,
+    title: study.seo.title,
+    description: study.seo.description,
+    crumbs,
+    primaryImage: study.heroImage,
+    extra: study.video ? [videoNode(study.video, absoluteUrl(href(route, lang)), lang)] : [],
+  });
+
   return (
     <PageShell lang={lang} route={route}>
+      <JsonLd data={structuredData} />
       <article>
         <header className="container page-intro case-intro">
           <Breadcrumbs items={crumbs} label={t.a11y.breadcrumb} />

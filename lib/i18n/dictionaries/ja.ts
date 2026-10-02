@@ -39,6 +39,7 @@ export const ja: Dictionary = {
     rights: "架空のブランドです。掲載内容と画像はデモ用に制作したものです。",
   },
   home: {
+    statsLabel: "数字で見るスタジオ",
     featuredWork: "主な実績",
     allWork: "実績一覧",
     services: "サービス",

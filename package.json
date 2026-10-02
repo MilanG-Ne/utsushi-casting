@@ -24,6 +24,7 @@
     "media": "python3 scripts/media/generate.py"
   },
   "dependencies": {
+    "@portabletext/react": "8.0.1",
     "@portabletext/types": "^4.0.2",
     "@sanity/client": "7.27.0",
     "@sanity/vision": "6.17.0",

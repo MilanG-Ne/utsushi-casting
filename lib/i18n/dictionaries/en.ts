@@ -40,6 +40,7 @@ export const en = {
     rights: "Fictional brand. Content and imagery created for demonstration.",
   },
   home: {
+    statsLabel: "The studio in numbers",
     featuredWork: "Selected work",
     allWork: "All work",
     services: "What we do",

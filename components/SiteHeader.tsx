@@ -5,6 +5,7 @@ import { href, type AppRoute } from "@/lib/i18n/routes";
 import { getNavServices } from "@/lib/content";
 import { BrandMark, Chevron, MenuIcon } from "./Icons";
 import { LanguageSwitch } from "./LanguageSwitch";
+import { Txt } from "./Txt";
 
 type Props = { lang: Locale; route: AppRoute | null };
 
@@ -59,8 +60,8 @@ export async function SiteHeader({ lang, route }: Props) {
                           href={href({ name: "service", slug: s.slug }, lang)}
                           aria-current={current(route, "service", s.slug)}
                         >
-                          <strong>{s.title}</strong>
-                          <span>{s.summary}</span>
+                          <Txt as="strong" value={s.title} />
+                          <Txt as="span" value={s.shortSummary} />
                         </Link>
                       </li>
                     ))}
@@ -101,7 +102,7 @@ export async function SiteHeader({ lang, route }: Props) {
                   {services.map((s) => (
                     <li key={s.slug}>
                       <a href={href({ name: "service", slug: s.slug }, lang)} aria-current={current(route, "service", s.slug)}>
-                        {s.title}
+                        <Txt value={s.title} />
                       </a>
                     </li>
                   ))}

@@ -1,30 +1,32 @@
 import { notFound } from "next/navigation";
 import { PageShell } from "@/components/PageShell";
+import { Txt } from "@/components/Txt";
+import { getCaseStudy, getCaseStudySlugs } from "@/lib/content";
 import type { Locale } from "@/lib/i18n/config";
-import { getDictionary } from "@/lib/i18n/dictionaries";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 type Params = Promise<{ slug: string }>;
-const SLUGS = ["harbour-lights", "the-lantern-keeper"];
 
 export async function caseStudyParams() {
-  return SLUGS.map((slug) => ({ slug }));
+  return (await getCaseStudySlugs()).map((slug) => ({ slug }));
 }
 
 export async function caseStudyMetadata(lang: Locale, params: Params) {
   const { slug } = await params;
-  if (!SLUGS.includes(slug)) return {};
-  const t = getDictionary(lang);
-  return buildMetadata({ lang, route: { name: "caseStudy", slug }, title: slug, description: t.meta.defaultDescription, type: "article" });
+  const study = await getCaseStudy(slug, lang);
+  if (!study) return {};
+  return buildMetadata({ lang, route: { name: "caseStudy", slug }, title: study.seo.title, description: study.seo.description, type: "article" });
 }
 
 export async function CaseStudyPage({ lang, params }: { lang: Locale; params: Params }) {
   const { slug } = await params;
-  if (!SLUGS.includes(slug)) notFound();
+  const study = await getCaseStudy(slug, lang);
+  if (!study) notFound();
   return (
     <PageShell lang={lang} route={{ name: "caseStudy", slug }}>
       <section className="container page-intro">
-        <h1 className="display-2">{slug}</h1>
+        <Txt as="h1" className="display-2" value={study.title} />
+        <Txt as="p" className="lede" value={study.summary} />
       </section>
     </PageShell>
   );

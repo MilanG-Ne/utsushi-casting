@@ -5,6 +5,7 @@ import { href, type AppRoute } from "@/lib/i18n/routes";
 import { getNavServices, getSiteSettings } from "@/lib/content";
 import { BrandMark } from "./Icons";
 import { LanguageSwitch } from "./LanguageSwitch";
+import { Txt } from "./Txt";
 
 export async function SiteFooter({ lang, route }: { lang: Locale; route: AppRoute | null }) {
   const t = getDictionary(lang);
@@ -39,7 +40,9 @@ export async function SiteFooter({ lang, route }: { lang: Locale; route: AppRout
               </li>
               {services.map((s) => (
                 <li key={s.slug}>
-                  <Link href={href({ name: "service", slug: s.slug }, lang)}>{s.title}</Link>
+                  <Link href={href({ name: "service", slug: s.slug }, lang)}>
+                    <Txt value={s.title} />
+                  </Link>
                 </li>
               ))}
               <li>

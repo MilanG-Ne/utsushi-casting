@@ -1,4 +1,5 @@
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { EnquiryForm } from "@/components/EnquiryForm";
 import { PageShell } from "@/components/PageShell";
 import { RichText } from "@/components/RichText";
 import { JsonLd } from "@/components/JsonLd";
@@ -51,7 +52,17 @@ export async function ContactPage({ lang }: { lang: Locale }) {
           <h2 id="enquiry-heading" className="display-3">
             {t.contact.formHeading}
           </h2>
-          <div data-enquiry-form-slot />
+          {/* Shown only after a no-JavaScript form post redirects back here with a fragment. */}
+          <p id="enquiry-sent" className="target-notice form-outcome form-outcome--success" tabIndex={-1}>
+            {t.contact.noJsSuccess}
+          </p>
+          <p id="enquiry-invalid" className="target-notice form-outcome form-outcome--error" tabIndex={-1}>
+            {t.contact.invalidHeading}
+          </p>
+          <p id="enquiry-error" className="target-notice form-outcome form-outcome--error" tabIndex={-1}>
+            {t.contact.errorHeading} {t.contact.errorBody.replace("{email}", settings.email)}
+          </p>
+          <EnquiryForm lang={lang} labels={t.contact} email={settings.email} sourcePage={href(ROUTE, lang)} />
         </section>
 
         <aside className="contact-aside">

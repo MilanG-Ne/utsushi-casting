@@ -1,0 +1,198 @@
+{
+  "$id": "https://github.com/MilanG-Ne/utsushi-casting/blob/main/docs/enquiry-payload.schema.json",
+  "title": "Utsushi Casting enquiry payload v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Payload format version. Breaking changes bump the major version."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^enq_[0-9a-f]{32}$",
+      "description": "Enquiry ID (UUIDv7, time-ordered). Also sent as the Idempotency-Key header."
+    },
+    "submittedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
+      "description": "When the visitor submitted the form (UTC, ISO 8601)."
+    },
+    "locale": {
+      "type": "string",
+      "enum": [
+        "en",
+        "ja"
+      ],
+      "description": "Language of the page the form was submitted from."
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "site": {
+          "type": "string",
+          "format": "uri",
+          "description": "Origin of the website."
+        },
+        "page": {
+          "type": "string",
+          "description": "Path of the page that hosted the form, e.g. /ja/contact."
+        },
+        "channel": {
+          "type": "string",
+          "const": "web-form"
+        }
+      },
+      "required": [
+        "site",
+        "page",
+        "channel"
+      ],
+      "additionalProperties": false
+    },
+    "contact": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 254,
+          "format": "email",
+          "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+        },
+        "company": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "preferredLanguage": {
+          "type": "string",
+          "enum": [
+            "en",
+            "ja"
+          ],
+          "description": "Language the visitor wants the reply in."
+        }
+      },
+      "required": [
+        "name",
+        "email",
+        "company",
+        "preferredLanguage"
+      ],
+      "additionalProperties": false
+    },
+    "enquiry": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "type": "string",
+          "enum": [
+            "film-and-television",
+            "commercials",
+            "voice-and-localization",
+            "other"
+          ]
+        },
+        "projectTitle": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "timeline": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "budget": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "undisclosed",
+                "under-10k",
+                "10k-50k",
+                "50k-plus"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 4000
+        }
+      },
+      "required": [
+        "service",
+        "projectTitle",
+        "timeline",
+        "budget",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    "consent": {
+      "type": "object",
+      "properties": {
+        "storeAndContact": {
+          "type": "boolean",
+          "const": true
+        },
+        "policyVersion": {
+          "type": "string"
+        },
+        "consentedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+        }
+      },
+      "required": [
+        "storeAndContact",
+        "policyVersion",
+        "consentedAt"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "submittedAt",
+    "locale",
+    "source",
+    "contact",
+    "enquiry",
+    "consent"
+  ],
+  "additionalProperties": false,
+  "description": "Utsushi Casting website enquiry"
+}

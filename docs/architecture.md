@@ -174,8 +174,10 @@ from `content/seed`, mapped through the same functions, so tests exercise real c
 - No `next/image` and no client-side image component: a server-rendered `<picture>` with
   AVIF/WebP `srcset`, explicit `width`/`height` and `fetchpriority` for the hero.
 - Fonts: one self-hosted Latin display face via `next/font/local` (metric-adjusted
-  fallback, so no layout shift). Japanese uses the system font stack (Hiragino, Yu Gothic,
-  Noto Sans JP), so no multi-megabyte CJK font download.
+  fallback, `display: optional`, so no layout shift) with a Latin `unicode-range`, so
+  Japanese text never waits for it. Japanese uses the system font stacks (Hiragino, Yu
+  Gothic, Noto Sans JP), so there is no multi-megabyte CJK font download.
+- `content-visibility: auto` on below-the-fold sections to cut initial layout work.
 - GSAP: the homepage renders a small client component that, after hydration and only when
   `prefers-reduced-motion` is not `reduce`, dynamically imports `gsap` and `ScrollTrigger`
   during idle time. Content pages never reference it. The LCP element (hero heading) is
@@ -183,7 +185,8 @@ from `content/seed`, mapped through the same functions, so tests exercise real c
 - Video: poster image + play button. The `<video>` element and file are created only on
   click. No autoplay.
 - Budget: `scripts/check-js-budget.mjs` reads the prerendered HTML of every page, sums the
-  gzipped size of the scripts each page loads, and fails CI above 150 KB.
+  gzipped size of the scripts each page loads, and fails CI above 150 KB. Results are in
+  [performance.md](performance.md).
 
 ## Enquiry pipeline
 

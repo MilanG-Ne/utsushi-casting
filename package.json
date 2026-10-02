@@ -22,7 +22,8 @@
     "budget": "node scripts/check-js-budget.mjs",
     "seed": "tsx scripts/seed-sanity.ts",
     "media": "python3 scripts/media/generate.py",
-    "schema:enquiry": "tsx scripts/generate-payload-schema.ts"
+    "schema:enquiry": "tsx scripts/generate-payload-schema.ts",
+    "lhci": "lhci autorun"
   },
   "dependencies": {
     "@portabletext/react": "8.0.1",
@@ -41,6 +42,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
+    "@lhci/cli": "0.15.1",
     "@playwright/test": "1.63.0",
     "@types/node": "^22.20.5",
     "@types/react": "19.3.0",

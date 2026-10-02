@@ -315,6 +315,10 @@ button {
   font-size: var(--step-2);
 }
 
+.prose > :first-child {
+  margin-top: 0;
+}
+
 .prose h3 {
   margin-top: 1.6em;
   font-size: var(--step-1);
@@ -1966,4 +1970,16 @@ button {
   .skip-link {
     display: none;
   }
+}
+
+/* Skip rendering work for off-screen sections until they approach the viewport. */
+.section,
+.site-footer,
+.other-services,
+.next-case,
+.service-body,
+.case-body,
+.stats-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
 }

@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { BrandMark, Globe } from "@/components/Icons";
-import { fraunces } from "@/lib/fonts";
+import { fraunces } from "@/lib/fonts/ja";
 import { en } from "@/lib/i18n/dictionaries/en";
 import { ja } from "@/lib/i18n/dictionaries/ja";
 import { layoutViewport } from "@/lib/seo/layout";

@@ -48,9 +48,10 @@ export async function WorkIndexPage({ lang }: { lang: Locale }) {
       </header>
       <section className="container" aria-label={page.title.text}>
         <div className="work-list">
-          {studies.map((study) => (
+          {studies.map((study, i) => (
             <CaseStudyCard
               key={study.slug}
+              priority={i === 0}
               study={study}
               lang={lang}
               ctaLabel={t.work.viewCaseStudy}

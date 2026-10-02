@@ -34,8 +34,8 @@ export async function POST(req: NextRequest) {
   }
 
   const sourcePage = typeof raw.sourcePage === "string" && raw.sourcePage.startsWith("/") ? raw.sourcePage : "/contact";
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-  if (!rateLimit(ip)) {
+  const ip = req.headers.get("x-real-ip") ?? req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  if (!rateLimit(ip, Number(process.env.ENQUIRY_RATE_LIMIT ?? 5))) {
     return respond(isJson, origin, sourcePage, 429, { status: "rate-limited" }, "enquiry-error");
   }
 

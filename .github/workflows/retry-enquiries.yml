@@ -1,0 +1,26 @@
+name: Retry queued enquiries
+
+# Vercel Cron on the Hobby plan runs at most once a day, so this workflow drains the
+# enquiry outbox every 15 minutes as well. It does nothing until you set:
+#   repository variable  ENQUIRY_RETRY_URL  e.g. https://your-site.vercel.app/api/enquiries/retry
+#   repository secret    CRON_SECRET        the same value as on Vercel
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  drain:
+    if: ${{ vars.ENQUIRY_RETRY_URL != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Call the retry endpoint
+        run: |
+          curl --fail-with-body --silent --show-error --max-time 60 \
+            -X POST -H "Authorization: Bearer $CRON_SECRET" "$ENQUIRY_RETRY_URL"
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          ENQUIRY_RETRY_URL: ${{ vars.ENQUIRY_RETRY_URL }}

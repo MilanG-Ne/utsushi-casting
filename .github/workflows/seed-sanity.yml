@@ -1,0 +1,33 @@
+name: Seed Sanity
+
+# Run manually after creating the Sanity project. Needs:
+#   repository variable  NEXT_PUBLIC_SANITY_PROJECT_ID
+#   repository secret    SANITY_API_WRITE_TOKEN (an Editor token from sanity.io/manage)
+on:
+  workflow_dispatch:
+    inputs:
+      dataset:
+        description: Dataset to seed
+        default: production
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Seed bilingual demo content
+        run: pnpm seed
+        env:
+          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ vars.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+          NEXT_PUBLIC_SANITY_DATASET: ${{ inputs.dataset }}
+          SANITY_API_WRITE_TOKEN: ${{ secrets.SANITY_API_WRITE_TOKEN }}

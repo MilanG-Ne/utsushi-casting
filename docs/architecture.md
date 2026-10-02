@@ -25,15 +25,15 @@ reference for how the pieces fit together.
 
 ```text
 app/
-  [lang]/                      Root layout per locale; sets <html lang>
-    layout.tsx                 generateStaticParams → en, ja; dynamicParams = false
+  en/  ja/                     One route tree per locale, each with its own root layout (<html lang>)
+    layout.tsx                 Thin binding: <RootDocument lang="…">
     page.tsx                   Home (the only route that loads GSAP)
-    not-found.tsx              Designed 404, localized
-    [...missing]/page.tsx      Catch-all that calls notFound() so unknown URLs get the localized 404
     work/page.tsx              Work index
-    work/[slug]/page.tsx       Case studies
-    services/[slug]/page.tsx   Service pages
+    work/[slug]/page.tsx       Case studies (generateStaticParams, dynamicParams = false)
+    services/[slug]/page.tsx   Service pages (generateStaticParams, dynamicParams = false)
     contact/page.tsx           Contact page + enquiry form
+    not-found.tsx              Localized 404 for notFound() calls inside the tree
+  global-not-found.tsx         Server-rendered bilingual 404 for every unmatched URL
   studio/[[...tool]]/          Embedded Sanity Studio (own root layout, excluded from budgets)
   api/
     enquiries/route.ts         Contact form handler (JSON and no-JS form posts)
@@ -41,20 +41,8 @@ app/
     mock-crm/enquiries/route.ts  Mock CRM endpoint (signature check, idempotency, outage simulation)
     revalidate/route.ts        Sanity webhook → tag-based revalidation
   sitemap.ts, robots.ts
+views/                         Page implementations shared by both locale trees (HomePage, ServicePage, …)
 components/                    Server components by default; client components are leaf-level and few
-lib/
-  i18n/                        Locale config, route registry, UI dictionaries (en.ts, ja.ts)
-  content/                     Content types, GROQ queries, Sanity source, fixture source, mappers
-  seo/                         Metadata builder (canonical + hreflang), JSON-LD builders
-  enquiries/                   Payload schema, delivery pipeline, CRM client, email fallback, queues
-sanity/
-  schemaTypes/                 localized field types + caseStudy, service, page, siteSettings
-content/seed/                  Bilingual seed documents (used by the seed script and the fixture source)
-public/media/                  Generated imagery (AVIF/WebP variants) and showreel clips
-scripts/                       Seed script, JS budget check, media generation
-tests/                         Vitest unit tests, Playwright end-to-end + axe accessibility tests
-docs/                          This plan, enquiry payload schema, performance results
-.github/workflows/             CI (lint, typecheck, tests, build, budget, Lighthouse CI), seed, retry drain
 ```
 
 ## i18n routing
@@ -75,9 +63,13 @@ of the current route.
 
 ### How English lives at the root without middleware
 
-All pages live under a single dynamic segment, `app/[lang]`, so each locale gets its own
-root layout with the correct `<html lang>` attribute. English is served from the root by
-**config-level rewrites** in `next.config.ts`, not by middleware:
+Each locale is a real route tree (`app/en`, `app/ja`) with its own root layout, so the
+`<html lang>` attribute is correct in the server HTML and the locale is a compile-time
+constant in every page. The route files are three-line bindings to shared views in
+`views/`; a unit test asserts both trees contain exactly the same files.
+
+English is served from the root by **config-level rewrites** in `next.config.ts`, not by
+middleware:
 
 ```ts
 rewrites: beforeFiles
@@ -92,6 +84,21 @@ Why rewrites instead of middleware (`proxy.ts`):
 - Every page stays fully static. There is no per-request function invocation for routing.
 - Nothing runs on the edge for a plain page view, so there is no added TTFB or cost.
 - The behaviour is declarative and testable from the config alone.
+
+Why real `en`/`ja` trees instead of a dynamic `[lang]` segment: `not-found.tsx` receives no
+params, so a dynamic segment cannot know which language its 404 should be in. With static
+trees each locale owns its 404, and the layout needs no `generateStaticParams`.
+
+### 404 handling
+
+- Unknown slugs and unmatched URLs never reach a page: slug routes use
+  `dynamicParams = false`, and there is no catch-all. Next answers them with
+  `app/global-not-found.tsx`, a fully server-rendered page with a real `404` status.
+- That page is bilingual (it bypasses the locale layouts). A one-line inline script puts the
+  Japanese copy first on `/ja/...` URLs before first paint; without JavaScript both
+  languages are shown.
+- New CMS documents therefore need a rebuild to get a URL (a Sanity webhook can call a
+  Vercel deploy hook). Edits to existing documents use tag revalidation and need no rebuild.
 
 There is no locale auto-detection redirect. Visitors land on the URL they asked for, and
 search engines see stable, crawlable URLs. Language choice is explicit through the switch.
@@ -141,7 +148,7 @@ with zero client JavaScript. The switch link carries `hreflang` and `lang` attri
 - `alternates.languages` with `en`, `ja` and `x-default`,
 - Open Graph `locale` / `alternateLocale` (`en_GB`, `ja_JP`).
 
-The 404 page is `noindex` and carries no alternates.
+Both 404 pages are `noindex` and carry no alternates.
 
 ## Content model (Sanity)
 

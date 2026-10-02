@@ -793,7 +793,7 @@ button {
 }
 
 :lang(ja) .hero__heading {
-  max-width: 16em;
+  max-width: 12.5em;
 }
 
 .hero__lede {
@@ -807,11 +807,73 @@ button {
   margin-top: var(--space-xs);
 }
 
+.hero__inner {
+  position: relative;
+}
+
+.hero__viewfinder {
+  display: none;
+}
+
+@media (min-width: 60rem) {
+  .hero__viewfinder {
+    position: absolute;
+    inset: -1.5rem var(--gutter) -1.5rem auto;
+    display: block;
+    width: min(26rem, 32%);
+    pointer-events: none;
+  }
+
+  .hero__viewfinder span {
+    position: absolute;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 2px solid var(--accent);
+  }
+
+  .hero__viewfinder span:nth-child(1) { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+  .hero__viewfinder span:nth-child(2) { top: 0; right: 0; border-left: 0; border-bottom: 0; }
+  .hero__viewfinder span:nth-child(3) { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+  .hero__viewfinder span:nth-child(4) { bottom: 0; left: 0; border-right: 0; border-top: 0; }
+
+  .hero__viewfinder::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.9rem;
+    height: 0.9rem;
+    border-radius: 50%;
+    background: var(--accent);
+    translate: -50% -50%;
+  }
+}
+
 .marquee {
+  position: relative;
   margin-top: var(--space-xl);
   border-block: 1px solid var(--line);
   overflow: hidden;
   white-space: nowrap;
+}
+
+.marquee__toggle {
+  position: absolute;
+  z-index: 1;
+  right: var(--gutter);
+  top: 50%;
+  translate: 0 -50%;
+  min-height: 2.75rem;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: var(--step--1);
+  font-weight: 600;
+}
+
+.marquee__toggle[hidden] {
+  display: none;
 }
 
 .marquee__track {

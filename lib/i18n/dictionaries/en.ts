@@ -41,6 +41,8 @@ export const en = {
   },
   home: {
     statsLabel: "The studio in numbers",
+    pauseMotion: "Pause animation",
+    playMotion: "Play animation",
     featuredWork: "Selected work",
     allWork: "All work",
     services: "What we do",

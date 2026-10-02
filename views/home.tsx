@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CallToAction } from "@/components/CallToAction";
 import { CaseStudyCard } from "@/components/CaseStudyCard";
+import { HomeMotion } from "@/components/HomeMotion";
 import { ArrowRight } from "@/components/Icons";
 import { PageShell } from "@/components/PageShell";
 import { ServiceCard } from "@/components/ServiceCard";
@@ -51,6 +52,12 @@ export async function HomePage({ lang }: { lang: Locale }) {
       <JsonLd data={structuredData} />
       <section className="hero" aria-labelledby="hero-heading">
         <div className="container hero__inner">
+          <div className="hero__viewfinder" aria-hidden="true" data-viewfinder>
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
           {page.eyebrow && <Txt as="p" className="eyebrow" value={page.eyebrow} />}
           <h1 id="hero-heading" className="display-1 hero__heading">
             <Txt value={page.heading} />
@@ -66,8 +73,11 @@ export async function HomePage({ lang }: { lang: Locale }) {
             </Link>
           </div>
         </div>
-        <div className="marquee" aria-hidden="true">
-          <div className="marquee__track" data-marquee>
+        <div className="marquee">
+          <button className="marquee__toggle" type="button" aria-pressed="false" data-marquee-toggle data-pause-label={t.home.pauseMotion} data-play-label={t.home.playMotion} hidden>
+            {t.home.pauseMotion}
+          </button>
+          <div className="marquee__track" aria-hidden="true" data-marquee>
             {[0, 1].map((copy) => (
               <ul key={copy} className="marquee__list">
                 {ROLES.map(([en, ja]) => (
@@ -182,6 +192,7 @@ export async function HomePage({ lang }: { lang: Locale }) {
       )}
 
       <CallToAction lang={lang} />
+      <HomeMotion />
     </PageShell>
   );
 }

@@ -40,6 +40,8 @@ export const ja: Dictionary = {
   },
   home: {
     statsLabel: "数字で見るスタジオ",
+    pauseMotion: "アニメーションを停止",
+    playMotion: "アニメーションを再生",
     featuredWork: "主な実績",
     allWork: "実績一覧",
     services: "サービス",
